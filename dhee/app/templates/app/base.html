@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>{% block title %}{% endblock%}| DHEE</title>
+    <title>{% block title %}{% endblock%} | DHEE</title>
 </head>
 <body>
     <nav class="py-6 px-6 flex justify-between border-b items-center border-gray-200">
@@ -14,9 +14,11 @@
         <a href="#" class="text-lg font-semibold hover:text-gray-500">Browse</a>
         <!-- <a href="#" class="text-lg font-semibold rounded-md bg-black text-white">SignUp</div> -->
         <!-- <a href="#" class="text-lg "></a> -->
-        <a href="#" class="px-6 py-3 text-lg font-semibold bg-black text-white rounded-md border border-slate-200 hover:text-gray-500">SignUp</a>
-        <a href="#" class="px-6 py-3 text-lg font-semibold bg-black text-white rounded-md border border-slate-200 hover:text-gray-500">Login</a>
-        
+         {% if request.user.is_authenticated %}
+         {% else %}
+        <a href="{% url 'app:signup' %}" class="px-6 py-3 text-lg font-semibold bg-black text-white rounded-md border border-slate-200 hover:text-gray-500">SignUp</a>
+        <a href="{% url 'app:login' %}" class="px-6 py-3 text-lg font-semibold bg-black text-white rounded-md border border-slate-200 hover:text-gray-500">Login</a>
+        {% endif %}
     </div>
     </nav>
     <div class="px-6 py-6">
@@ -27,7 +29,7 @@
     <div class="w-2/3 pr-10">
         <h3 class="mb-5 font-semibold text-white">About</h3>
         <p class="text-lg text-white">Welcome to Dhee, where <span class="mb-5 font-bold text-gray-50">fashion meets innovation!</span> We're dedicated to enhancing your online shopping experience with personalized recommendations, virtual try-on, user reviews, and more. Stay stylish, sustainable, and connected with our social media integration and mobile app. Join us as we revolutionize the way you shop for clothing online!</p><br>
-        <iframe src="https://drive.google.com/file/d/1TpXIBt-Da76QXyeT8S3cT1oOVBU2nL4A/preview" width="800" height="480" style="border-radius: 10px;"></iframe>
+        <iframe src="https://drive.google.com/file/d/1DoYyEV4HCB9qCm9oEotQL0ZJdMHdMpZn/preview" width="800" height="380" style="border-radius: 10px;"></iframe>
 
     
     </div>
@@ -36,7 +38,7 @@
             <h3 class="font-semibold mb-5 text-gray-400">Menu</h3>
             <ul class="space-y-2">
             <li><a href="#" class="mb-5 font-semibold text-gray-400">About</a></h3>
-            <li><a href="{% url 'contact' %}" class="mb-5 font-semibold text-gray-400">Contact</a></h3>
+            <li><a href="{% url 'app:contact' %}" class="mb-5 font-semibold text-gray-400">Contact</a></h3>
             <li><a href="#" class="mb-5 font-semibold text-gray-400">Privacy Policy</a></h3>
             <li><a href="#" class="mb-5 font-semibold text-gray-400">Terms of use</a></h3>
             </ul>
