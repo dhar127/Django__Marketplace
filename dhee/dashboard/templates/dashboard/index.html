@@ -6,21 +6,24 @@ Welcome
 {% block content %}
 <h1>
     <div class="mt-2 px-3 py-12 bg-gray-100 rounded-xl">
-        <h2 class="mb-12 text-2xl text-center border-b font-serif ">FRESH ARRIVALS</h2>
+        <h2 class="mb-12 text-2xl text-center border-b font-serif ">MY ITEMS</h2>
         <div class="grid grid-cols-3 gap-3">
-            {% for item in items %}
+            {% for item in items reversed %}
+            {% if forloop.counter <= 3 %}
             <div class="items-center">
                 <a href="{% url 'item:detail' item.id %}">
                     <div>
-                        <img src="{{item.image.url}}"  class="rounded-t-xl object-fill h-80 w-30 img-center">
+                        <img src="{{ item.image.url }}" class="rounded-t-xl object-fill h-80 w-30 img-center">
                     </div>
                     <div class="p-7 bg-white rounded-b-xl">
-                        <h2 class="text-2xl font-serif">{{item.name}}</h2>
-                        <p class="text-gray-500 font-serif">Price:{{item.price}}</p>
-
+                        <h2 class="text-2xl font-serif">{{ item.name }}</h2>
+                        <p class="text-gray-500 font-serif">Price:{{ item.price }}</p>
                     </div>
                 </a>
             </div>
+        {% else %}
+            {# If more than 10 items, do something else or nothing #}
+        {% endif %}
             {% endfor %}
             </div>
             </div>
