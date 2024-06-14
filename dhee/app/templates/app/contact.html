@@ -4,5 +4,31 @@ Contact
 {% endblock %}
 
 {% block content %}
-<h1> The contact page</h1>
+<h3 class="mb-20 font-semibold text-center">Contact Us ⬇️<hr><br>For Further Queries Reach us at dheefashions@gmail.com <br><br><hr><br>
+
+            <form action="https://formsubmit.co/dharaniponnivalavan@gmail.com" method="POST" className="base" class="w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl object-none text-center border border-slate-300">
+                <div className="input-row " style="align-items:center;">
+                    <div className="input-group">
+                        <h4 >Name </h4>
+                        <input name="name" type="text" placeholder='John Doe' class="w-80 bg-white shadow rounded" />
+                    </div>
+                    <div className="input-group">
+                    <h4>Phone </h4>
+                        <input type="text" name="phone" placeholder='+91 9876543210' class="w-80 bg-white shadow rounded" />
+                   
+                    </div>
+                </div>
+                <div className="input-row">
+                    <div className="input-group">
+                        <h4>Email</h4>
+                        <input type="email" name="email" placeholder='johndoe@gmail.com' class="w-80 bg-white shadow rounded"/>
+                    </div>
+                    
+                </div>
+                <h4 >Message</h4>
+                <textarea rows="5" name="message" placeholder='Your Message' class="w-80 bg-white shadow rounded"></textarea>
+                <br>
+                <button class="py-4 px-8 text-lg bg-black hover:bg-gray-500 rounded-xl text-white uppercase ">Send</button>
+            </form>
+        </h3> 
 {% endblock %}
