@@ -19,7 +19,7 @@
 
 {% if request.user == item.created_by %}
 <div class="mt-6 p-6 bg-white rounded-xl">
-    <p>This is your item!</p>
+    <p>Here is your item!!!</p>
 
     <a href="{% url 'item:edit' item.id %}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl">Edit</a>
     <a href="{% url 'item:delete' item.id %}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-red-500 text-white rounded-xl">Delete</a>
@@ -27,14 +27,14 @@
 {% else %}  
 <a href="{% url 'conversation:new' item.id %}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Contact seller</a>
 {% endif %}
-<a href="#" class="inline-block mt-6 px-6 py-3 text-lg bg-black font-semibold rounded-xl text-white hover:bg-gray-500">Contact Seller</a>
+
     </div>
 </div>
 <h1>
     <div class="mt-2 px-3 py-12 bg-gray-100 rounded-xl">
         <h2 class="mb-12 text-2xl text-center border-b font-serif ">RELATED ARRIVALS</h2>
         <div class="grid grid-cols-3 gap-3">
-            {%for item in related_items %}
+            {% for item in related_items %}
             <div class="items-center">
                 <a href="{% url 'item:detail' item.id %}">
                     <div>
