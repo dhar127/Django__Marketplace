@@ -1,0 +1,30 @@
+{% extends 'app/base.html' %}
+{% block title %}
+Address
+{% endblock %}
+
+{% block content %}
+<div class="mt-4 text-center">
+    <p class="text-lg font-semibold mb-4">Address:</p>
+    <p class="mb-8">123 Example Street, Perambur, Chennai, Tamil Nadu, India</p>
+
+    <div class="flex justify-between space-x-6">
+        <div class="w-1/2">
+            <div class="relative" style="padding-top: 75%">
+                <iframe class="absolute inset-0 w-full h-full"
+                        src="https://drive.google.com/file/d/1utrZ7aUETx8a4qXJwqfDTvzC2edRLkkh/preview?usp=drive_link"
+                        allowfullscreen="" loading="lazy"></iframe>
+            </div>
+            
+        </div>
+        <div class="w-1/2">
+            <div class="relative" style="padding-top: 75%">
+                <iframe class="absolute inset-0 w-full h-full"
+                        src="https://drive.google.com/file/d/1XVYCGKP6S5QDOl4mTB2ontrPfmiPWKFg/preview?usp=drive_link"
+                        allowfullscreen="" loading="lazy"></iframe>
+            </div>
+           
+        </div>
+    </div>
+</div>
+{% endblock %}

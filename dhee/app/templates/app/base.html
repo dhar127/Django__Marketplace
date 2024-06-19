@@ -20,7 +20,7 @@
         <a href="{% url 'conversation:inbox' %}" class="px-6 py-3 text-lg font-semibold bg-black text-white rounded-md border border-slate-200 hover:text-gray-500">Inbox</a>
         <a href="{% url 'dashboard:index' %}" class="px-6 py-3 text-lg font-semibold bg-black text-white rounded-md border border-slate-200 hover:text-gray-500">Dashboard</a>
      
-         {% else %}
+        {% else %}
         <a href="{% url 'app:signup' %}" class="px-6 py-3 text-lg font-semibold bg-black text-white rounded-md border border-slate-200 hover:text-gray-500">SignUp</a>
         <a href="{% url 'app:login' %}" class="px-6 py-3 text-lg font-semibold bg-black text-white rounded-md border border-slate-200 hover:text-gray-500">Login</a>
         {% endif %}
@@ -44,7 +44,7 @@
             <ul class="space-y-2">
             <li><a href="{% url 'app:about' %}" class="mb-5 font-semibold text-gray-400">About</a></h3>
             <li><a href="{% url 'app:contact' %}" class="mb-5 font-semibold text-gray-400">Contact</a></h3>
-            <li><a href="#" class="mb-5 font-semibold text-gray-400">Privacy Policy</a></h3>
+            <li><a href="{% url 'app:address' %}" class="mb-5 font-semibold text-gray-400">Location</a></h3>
             <li><a href="#" class="mb-5 font-semibold text-gray-400">Terms of use</a></h3>
             </ul>
             

@@ -46,6 +46,8 @@ def index(request):
     # })
 def about(request):
     return render(request,'app/about.html')
+def address(request):
+    return render(request,'app/address.html')
 def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
