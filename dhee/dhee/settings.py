@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'dashboard',
     'item',
     'conversation',
-    'phonepay'
+    'phonepay',
+    'title'
     
 ]
 

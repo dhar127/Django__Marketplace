@@ -5,9 +5,30 @@ Welcome
 
 {% block content %}
 <h1>
+    <div class="relative bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 py-20 mb-8 rounded-lg">
+        <div class="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h1 class="mb-4 text-3xl font-extrabold leading-none tracking-tight text-white md:text-5xl lg:text-6xl dark:text-white">
+                    DHEE
+                </h1>
+                <div class="h-1 w-20 bg-white mx-auto mb-6 rounded-full"></div>
+                <h2 class="mb-4 text-lg font-bold leading-none tracking-tight text-white md:text-4xl lg:text-xl dark:text-white ">
+                    An online market place exclusive for women
+                </h2>
+                <div class="flex justify-center mt-6">
+                    <a href="{% url 'item:items' %}" class="bg-white hover:bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out">
+                        Explore Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
     <div class="mt-2 px-3 py-12 bg-gray-100 rounded-xl">
-        <h2 class="mb-12 text-2xl text-center border-b font-serif ">FRESH ARRIVALS</h2>
-        <div class="grid grid-cols-3 gap-3">
+        
+        <h2 class="animate-pulse mb-12 text-2xl text-center border-b font-serif ">FRESH ARRIVALS</h2>
+        <div class=" grid grid-cols-3 gap-3">
             {% for item in items %}
             <div class="items-center">
                 <a href="{% url 'item:detail' item.id %}">
