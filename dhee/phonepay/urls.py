@@ -1,10 +1,10 @@
 
 from django.urls import path
-from .views import home, success
+from .views import home, success,generate_bill
 
 app_name='phonepay'
 urlpatterns = [
-    
-    path('', home, name='home'),
-    path('success' , success , name='success')
+    path('<int:item_id>/',home, name='home'),
+    path('success/' , success , name='success'),
+    path('generate_bill/', generate_bill, name='generate_bill')
 ]

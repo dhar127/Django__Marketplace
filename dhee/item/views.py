@@ -69,3 +69,9 @@ def delete(request, pk):
     item.delete()
 
     return redirect('dashboard:index')
+# item/views.py
+from django.http import JsonResponse
+
+def item_price(request, item_id):
+    item = get_object_or_404(Item, id=item_id)
+    return JsonResponse({'price': item.price * 100})
