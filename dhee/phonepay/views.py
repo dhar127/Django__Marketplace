@@ -10,13 +10,13 @@ def home(request, item_id):
     item = get_object_or_404(Item, id=item_id)
     
     if request.method == "POST":
-        amount = item.price  # Convert to paise
+        amount = 50000  # Convert to paise
         order_currency = 'INR'
 
         client = razorpay.Client(
             auth=("rzp_test_2gdjmciQ45GBhe", "LMeNHvU3jutDBpqmGdH9lKBh"))
 
-        payment = client.order.create({'amount': amount, 'currency': order_currency, 'payment_capture': '9'})
+        payment = client.order.create({'amount': amount, 'currency': order_currency, 'payment_capture': '1'})
         
         return render(request, 'phonepay/index.html', {
             'item': item,
