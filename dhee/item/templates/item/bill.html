@@ -1,0 +1,21 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+<div id="bill" class="text-center">
+    <h3 class="font-semibold">Bill Details</h3>
+    <ul>
+        {% for item in cart_items %}
+        <li>{{ item.quantity }} x {{ item.product.name }} - ${{ item.total_price }}</li>
+        {% endfor %}
+    </ul>
+    <p>Total Price: ${{ total_price }}</p>
+    <form action="{% url 'phonepay:generate_bill' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="cart_items" value="{{ cart_items }}">
+        <input type="hidden" name="total_price" value="{{ total_price }}">
+        <input type="text" name="name" id="name" required class="form-control mb-4" placeholder="Name"><br>
+        <input type="email" name="email" id="email" required class="form-control mb-4" placeholder="Email"><br>
+        <button type="submit" id="pay-button" class="px-5 py-2 text-lg font-semibold bg-black text-white rounded-md border border-slate-200 hover:text-gray-500">Generate Bill</button>
+    </form>
+</div>
+{% endblock %}

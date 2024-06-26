@@ -1,0 +1,53 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+<head>
+    <!-- Your custom styles -->
+</head>
+
+<div>
+    <form id="add-to-cart-form" class="text-center border border-light p-5" action="{% url 'item:add_to_cart' %}" method="POST">
+        {% csrf_token %}
+        <!-- Your form fields here -->
+        <input type="hidden" name="item_name" value="{{ item.name }}">
+        <input type="number" name="quantity" value="1" min="1" required>
+        <button type="submit" id="add-to-cart-button">Add to Cart</button>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const addToCartForm = document.getElementById('add-to-cart-form');
+
+    addToCartForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        fetch("{% url 'item:add_to_cart' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify({
+                item_name: addToCartForm.querySelector('[name="item_name"]').value,
+                quantity: addToCartForm.querySelector('[name="quantity"]').value
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message); // Show a simple alert for demonstration
+                // You can customize this alert to use a modal or a toast message library
+            } else {
+                alert('Failed to add item to cart. Please try again.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while processing your request.');
+        });
+    });
+});
+</script>
+
+{% endblock %}

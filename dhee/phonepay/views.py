@@ -1,8 +1,7 @@
 from django.shortcuts import render, get_object_or_404
-import razorpay
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from item.models import Item
-from django.http import JsonResponse
 from django.conf import settings
 import os
 from reportlab.lib.pagesizes import letter
@@ -73,10 +72,8 @@ def generate_bill(request):
             'amount': amount,
             'bill_url': bill_url
         })
+
     return JsonResponse({'success': False})
-
-
-
 def home(request, item_id):
     item = get_object_or_404(Item, id=item_id)
     
