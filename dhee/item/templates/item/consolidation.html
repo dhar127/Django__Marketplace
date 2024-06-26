@@ -1,0 +1,12 @@
+{% extends "app/base.html" %}
+{% block title %}Consolidated Bill{% endblock %}
+
+{% block content %}
+<h1>Consolidated Bill</h1>
+<ul>
+    {% for item in cart_items %}
+    <li>{{ item.quantity }} x {{ item.product.name }} - ${{ item.total_price }}</li>
+    {% endfor %}
+</ul>
+<p>Total Price: ${{ total_price }}</p>
+{% endblock %}

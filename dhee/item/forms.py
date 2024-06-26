@@ -2,6 +2,8 @@ from django import forms
 from .models import Item
 INPUT_CLASSES = 'w-full rounded-xl border'
 
+from .models import CartItem
+
 class NewItemForm(forms.ModelForm):
     class Meta:
         model=Item
@@ -41,3 +43,9 @@ class EditItemForm(forms.ModelForm):
                 'class': INPUT_CLASSES
             })
         }
+class AddToCartForm(forms.ModelForm):
+    class Meta:
+        model = CartItem
+        fields = ['quantity']
+
+    product_id = forms.IntegerField(widget=forms.HiddenInput())

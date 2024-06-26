@@ -8,107 +8,65 @@
 </head>
 
 <div>
-    <form class="text-center border border-light p-5" action="success" method="POST" id="payment-form">
+    <form class="text-center border border-light p-5" action="{% url 'phonepay:generate_bill' %}" method="POST" id="payment-form">
         {% csrf_token %}
 
-        <p class="h3 mb-3 text-2xl text-center">Payment</p>
-        <p class="mb-3">Pay here⬇️</p>
-        <p>{{ item.price }}</p>
+       
+        <p class="h3 mb-3 text-2xl text-center">CASH ON DELIVERY✌️</p>
+        
 
-        <input type="text" name="name" id="name" required class="form-control mb-4" placeholder="Name">
-        <br>
-        <button id="pay-button" class="btn btn-primary">Proceed with Razorpay</button>
+        <input type="text" name="name" id="name" required class="form-control mb-4" placeholder="Name"><br>
+        <input type="email" name="email" id="email" required class="form-control mb-4" placeholder="Email"><br>
+        <input type="hidden" name="item_name" value="{{ item.name }}">
+        <input type="hidden" name="amount" value="{{ item.price }}">
+        
+        <button type="submit" id="pay-button" class="px-5 py-2 text-lg font-semibold bg-black text-white rounded-md border border-slate-200 hover:text-gray-500">Generate Bill</button>
     </form>
 </div>
 
-<div id="bill" style="display: none;">
-    <h3>Bill Details</h3>
+<div id="bill" style="display: none;" class="text-center">
+    <h3 class="font-semibold">Bill Details</h3>
     <p>Name: <span id="bill-name"></span></p>
     <p>Email: <span id="bill-email"></span></p>
     <p>Item: <span id="bill-item"></span></p>
-    <p>Amount Paid: <span id="bill-amount"></span></p>
-    <p>Transaction ID: <span id="bill-transaction-id"></span></p>
-    <a href="#" id="download-bill" class="btn btn-success">Download Bill</a>
+    <p>Amount to be Paid: <span id="bill-amount"></span></p><br>
+    <a href="#" id="download-bill" class="px-5 py-2 text-lg font-semibold bg-black text-white rounded-md border border-slate-200 hover:text-gray-500">Download Bill</a>
 </div>
 
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const itemPrice = parseFloat("{{ item.price }}");
-        const amountInPaise = itemPrice * 100;
-
-        const options = {
-            "key": "rzp_test_2gdjmciQ45GBhe", // Enter the Key ID generated from the Dashboard
-            "amount": amountInPaise,
-            "currency": "INR",
-            "name": "{{ item.name }}",
-            "description": "{{ item.name }}",
-            "image": "https://th.bing.com/th/id/R.abf9d1dfaabe403280283b7a8d48abc6?rik=FBjVGjzV1B0LLA&riu=http%3a%2f%2fwallpapercave.com%2fwp%2foRgxiY4.jpg&ehk=j9xWV1Dv94eovoN4bd%2bI5yp%2feL2hcmVwixYO69bSmOs%3d&risl=&pid=ImgRaw&r=0.jpg",
-            "order_id": "{{ payment.id }}", // Pass the order ID if available
-            "prefill": {
-                "name": "Dharani",
-                "email": "dhar22028.cs@rmkec.ac.in"
-            },
-            "theme": {
-                "color": "#F37254"
-            },
-            "handler": function(response) {
-                // After payment success, generate bill on the backend
-                fetch("{% url 'phonepay:generate_bill' %}", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRFToken": "{{ csrf_token }}"
-                    },
-                    body: JSON.stringify({
-                        payment_id: response.razorpay_payment_id,
-                        name: options.prefill.name,
-                        email: options.prefill.email,
-                        item_name: options.name,
-                        amount: options.amount / 100
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        document.getElementById('bill-name').innerText = options.prefill.name;
-                        document.getElementById('bill-email').innerText = options.prefill.email;
-                        document.getElementById('bill-item').innerText = options.name;
-                        document.getElementById('bill-amount').innerText = (options.amount / 100).toFixed(2) + ' INR';
-                        document.getElementById('bill-transaction-id').innerText = response.razorpay_payment_id;
-                        document.getElementById('download-bill').href = data.bill_url;
-                        document.getElementById('bill').style.display = 'block';
-                    } else {
-                        alert('Bill generation failed. Please try again.');
-                    }
-                });
-            },
-            "modal": {
-                "ondismiss": function() {
-                    alert("Payment cancelled.");
-                }
-            },
-            "method": {
-                "upi": true,    // Enabling UPI
-                "card": true,   // Enabling Card
-                "netbanking": true, // Enabling Netbanking
-                "wallet": true, // Enabling Wallet
-                "paylater": true // Enabling PayLater
-            }
+    document.getElementById('payment-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const formData = new FormData(this);
+        const data = {
+            name: formData.get('name'),
+            email: formData.get('email'),
+            item_name: formData.get('item_name'),
+            amount: formData.get('amount')
         };
 
-        const rzp1 = new Razorpay(options);
-
-        document.getElementById('pay-button').onclick = function(e){
-            rzp1.open();
-            e.preventDefault();
-        }
+        fetch("{% url 'phonepay:generate_bill' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('bill-name').innerText = data.name;
+                document.getElementById('bill-email').innerText = data.email;
+                document.getElementById('bill-item').innerText = data.item_name;
+                document.getElementById('bill-amount').innerText = data.amount + ' INR';
+                document.getElementById('download-bill').href = data.bill_url;
+                document.getElementById('bill').style.display = 'block';
+            } else {
+                alert('Bill generation failed. Please try again.');
+            }
+        });
     });
-
-    function goBack(url) {
-        window.location.href = url;
-    }
 </script>
-
 
 {% endblock %}
