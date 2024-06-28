@@ -46,6 +46,8 @@ class EditItemForm(forms.ModelForm):
 class AddToCartForm(forms.ModelForm):
     class Meta:
         model = CartItem
-        fields = ['quantity']
-
-    product_id = forms.IntegerField(widget=forms.HiddenInput())
+        fields = ('item', 'quantity')
+        widgets = {
+            'item': forms.HiddenInput(),  # Use a hidden input to store item ID
+            'quantity': forms.NumberInput(attrs={'min': 1}),  # Number input for quantity
+        }

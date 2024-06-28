@@ -1,16 +1,17 @@
 {% extends 'app/base.html' %}
 
 {% block content %}
-<head>
-    <!-- Your custom styles -->
-</head>
-
 <div>
     <form id="add-to-cart-form" class="text-center border border-light p-5" action="{% url 'item:add_to_cart' %}" method="POST">
         {% csrf_token %}
-        <!-- Your form fields here -->
+        <!-- Hidden input for item name -->
         <input type="hidden" name="item_name" value="{{ item.name }}">
-        <input type="number" name="quantity" value="1" min="1" required>
+        
+        <!-- Quantity input -->
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" name="quantity" value="1" min="1" required>
+        
+        <!-- Submit button -->
         <button type="submit" id="add-to-cart-button">Add to Cart</button>
     </form>
 </div>
@@ -36,8 +37,12 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert(data.message); // Show a simple alert for demonstration
-                // You can customize this alert to use a modal or a toast message library
+                alert(data.message); // Display success message
+                if (confirm('What would you like to do next? Press OK to add more items or Cancel to view your cart.')) {
+                    window.location.href = "{% url 'item:items' %}"; // Redirect to homepage
+                } else {
+                    window.location.href = "{% url 'item:cart_detail' %}"; // Redirect to cart detail page
+                }
             } else {
                 alert('Failed to add item to cart. Please try again.');
             }
@@ -49,5 +54,4 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-
 {% endblock %}

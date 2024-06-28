@@ -78,44 +78,55 @@ def delete(request, pk):
 def item_price(request, item_id):
     item = get_object_or_404(Item, id=item_id)
     return JsonResponse({'price': item.price * 100})
-from django.http import JsonResponse
 
 @login_required
 def add_to_cart(request):
     if request.method == 'POST':
         form = AddToCartForm(request.POST)
         if form.is_valid():
-            item_name = form.cleaned_data['item_name']
+            item_id = form.cleaned_data['item']
             quantity = form.cleaned_data['quantity']
             
-            # Retrieve the item based on its name
-            product = get_object_or_404(Item, name=item_name)
-
+            # Retrieve the item based on its ID
+            item = get_object_or_404(Item, id=item_id)
+            
             # Check if the user already has the item in their cart
             cart_item, created = CartItem.objects.get_or_create(
                 user=request.user,
-                product=product,
+                item=item,
                 defaults={'quantity': quantity}
             )
-
+            
             if not created:
                 # If item already exists in the cart, update the quantity
                 cart_item.quantity += quantity
                 cart_item.save()
-
-            # Return a JSON response indicating success
-            return JsonResponse({'success': True, 'message': 'Item added to cart successfully.'})
-        else:
-            # Return a JSON response with form errors if form is invalid
-            return JsonResponse({'success': False, 'errors': form.errors})
-    else:
-        # Return a JSON response for invalid request method (should not happen in ideal scenario)
-        return JsonResponse({'success': False, 'errors': 'Invalid request method'})
+            
+            # Prepare the JSON response with a success message
+            response_data = {
+                'success': True,
+                'message': 'Item added to cart successfully.',
+                'view_cart_url': reverse('item:cart_detail'),  # Replace with your actual URL name for cart view
+                'bill_url': reverse('item:generate_bill'),  # Replace with your actual URL name for bill view
+            }
+            return JsonResponse(response_data)
+        
+        # If form is not valid, return form errors in JSON response
+        return JsonResponse({'success': False, 'message': 'Form validation error.', 'errors': form.errors})
+    
+    # Redirect or handle GET requests as needed
+    # This should not normally happen for 'POST' method only view
+    return JsonResponse({'success': False, 'message': 'Invalid request method'})
 
 @login_required
 def cart_detail(request):
     cart_items = CartItem.objects.filter(user=request.user)
-    return render(request, 'cart_detail.html', {'cart_items': cart_items})
+    total_price = sum(item.total_price() for item in cart_items)
+
+    return render(request, 'cart_detail.html', {
+        'cart_items': cart_items,
+        'total_price': total_price,
+    })
 
 @login_required
 def consolidate_cart(request):
