@@ -31,19 +31,59 @@
         {% else %}
         <!-- Display for regular users -->
         <a href="{% url 'conversation:new' item.id %}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Contact Seller</a>
-        <a href="{% url 'item:cart_detail' %}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">View Cart</a>
-
+        
+         <a href="{% url 'phonepay:home' item.id %}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Buy</a>
         <!-- Add to Cart form -->
-        <form id="add-to-cart-form" class="mt-6" method="post" action="{% url 'item:add_to_cart' %}">
-            {% csrf_token %}
-            <input type="hidden" name="item_id" value="{{ item.id }}">
-            <label for="quantity">Quantity:</label>
-            <input type="number" id="quantity" name="quantity" min="1" value="1" required>
-            <button type="submit" class="inline-block px-6 py-3 text-lg font-semibold bg-green-500 text-white rounded-xl">Add to Cart</button>
-        </form>
+        
+        
+        <button type="button" value="{{item.id}}" class="inline-block px-6 py-3 text-lg font-semibold bg-green-500 text-white rounded-xl" id="add-cart">Add to Cart</button>
+        <a href="{{ item.image.url }}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">View Cart</a>
+        
         {% endif %}
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var addButton = document.getElementById('add-cart');
+    
+        addButton.addEventListener('click', function() {
+            // Create overlay
+            var overlay = document.createElement('div');
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100%';
+            overlay.style.height = '100%';
+            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            overlay.style.zIndex = '1000';
+    
+            // Create message box
+            var messageBox = document.createElement('div');
+            messageBox.style.position = 'fixed';
+            messageBox.style.top = '50%';
+            messageBox.style.left = '50%';
+            messageBox.style.transform = 'translate(-50%, -50%)';
+            messageBox.style.backgroundColor = '#fff';
+            messageBox.style.padding = '20px';
+            messageBox.style.borderRadius = '8px';
+            messageBox.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.2)';
+            messageBox.style.zIndex = '1001';
+            messageBox.innerHTML = '<p style="font-size: 18px; font-weight: bold;">Item added to cart</p>';
+    
+            // Append overlay and message box to body
+            document.body.appendChild(overlay);
+            document.body.appendChild(messageBox);
+    
+            // Remove message box after 2 seconds
+            setTimeout(function() {
+                document.body.removeChild(overlay);
+                document.body.removeChild(messageBox);
+            }, 2000);
+        });
+    });
+    </script>
+    
+    
 
 <!-- Related items section -->
 <div class="mt-12 px-3 py-12 bg-gray-100 rounded-xl">

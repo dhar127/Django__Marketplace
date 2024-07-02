@@ -79,45 +79,49 @@ def item_price(request, item_id):
     item = get_object_or_404(Item, id=item_id)
     return JsonResponse({'price': item.price * 100})
 
+
 @login_required
 def add_to_cart(request):
-    if request.method == 'POST':
-        form = AddToCartForm(request.POST)
-        if form.is_valid():
-            item_id = form.cleaned_data['item']
-            quantity = form.cleaned_data['quantity']
+    if request.method == 'POST' and request.is_ajax():
+        item_id = request.POST.get('item')
+        quantity = request.POST.get('quantity', 1)  # Default to 1 if quantity not provided
+        
+        try:
+            item = Item.objects.get(id=item_id)
             
-            # Retrieve the item based on its ID
-            item = get_object_or_404(Item, id=item_id)
-            
-            # Check if the user already has the item in their cart
+            # Check if the item already exists in the cart
             cart_item, created = CartItem.objects.get_or_create(
                 user=request.user,
-                item=item,
-                defaults={'quantity': quantity}
+                item=item
             )
             
             if not created:
-                # If item already exists in the cart, update the quantity
-                cart_item.quantity += quantity
-                cart_item.save()
+                # If item exists in the cart, update quantity
+                cart_item.quantity += int(quantity)
+            else:
+                # Otherwise, set the initial quantity
+                cart_item.quantity = int(quantity)
             
-            # Prepare the JSON response with a success message
+            cart_item.save()
+            
+            # Prepare JSON response for success
             response_data = {
                 'success': True,
                 'message': 'Item added to cart successfully.',
                 'view_cart_url': reverse('item:cart_detail'),  # Replace with your actual URL name for cart view
-                'bill_url': reverse('item:generate_bill'),  # Replace with your actual URL name for bill view
             }
-            return JsonResponse(response_data)
+            
+        except Item.DoesNotExist:
+            # Handle case where item ID does not exist
+            response_data = {
+                'success': False,
+                'message': 'Item does not exist.',
+            }
         
-        # If form is not valid, return form errors in JSON response
-        return JsonResponse({'success': False, 'message': 'Form validation error.', 'errors': form.errors})
+        return JsonResponse(response_data)
     
-    # Redirect or handle GET requests as needed
-    # This should not normally happen for 'POST' method only view
-    return JsonResponse({'success': False, 'message': 'Invalid request method'})
-
+    # Handle cases where request method is not POST or not AJAX
+    return JsonResponse({'success': False, 'message': 'Invalid request.'})
 @login_required
 def cart_detail(request):
     cart_items = CartItem.objects.filter(user=request.user)
